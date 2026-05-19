@@ -1,0 +1,26 @@
+# Xcode
+build/
+*.xcworkspace
+xcuserdata/
+DerivedData/
+*.xcuserstate
+PasteEcho.xcodeproj/xcuserdata/
+PasteEcho.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.build/
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Generated project (created by xcodegen)
+PasteEcho.xcodeproj/
+
+# IDE
+.vscode/
+.idea/
+
+# Archive
+*.xcarchive
