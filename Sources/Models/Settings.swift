@@ -1,12 +1,27 @@
 import Foundation
 
-struct Settings: Codable {
+struct Settings: Codable, Sendable {
     var maxItemCount: Int = 200
     var retentionPeriod: RetentionPeriod = .threeDays
     var launchAtLogin: Bool = true
+    var windowMode: WindowMode = .topDocked
 }
 
-enum RetentionPeriod: String, Codable, CaseIterable, Identifiable {
+enum WindowMode: String, Codable, CaseIterable, Identifiable, Sendable {
+    case topDocked
+    case freeWindow
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .topDocked:  return "Top Docked"
+        case .freeWindow: return "Free Window"
+        }
+    }
+}
+
+enum RetentionPeriod: String, Codable, CaseIterable, Identifiable, Sendable {
     case oneDay
     case threeDays
     case fiveDays

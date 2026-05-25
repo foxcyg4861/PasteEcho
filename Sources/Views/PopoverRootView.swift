@@ -29,6 +29,15 @@ struct PopoverRootView: View {
                 .font(.system(size: 16, weight: .semibold))
             Spacer()
             Button {
+                viewModel.toggleWindowPin()
+            } label: {
+                Image(systemName: viewModel.isWindowPinned ? "pin.fill" : "pin")
+                    .font(.system(size: 16))
+                    .foregroundColor(viewModel.isWindowPinned ? .orange : .secondary)
+            }
+            .buttonStyle(.plain)
+            .help(viewModel.isWindowPinned ? "Unpin Window" : "Pin Window")
+            Button {
                 openSettings()
             } label: {
                 Image(systemName: "gearshape")
@@ -69,7 +78,8 @@ struct PopoverRootView: View {
         .padding(.vertical, 6)
     }
 
+    @MainActor
     private func openSettings() {
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        (NSApp.delegate as? AppDelegate)?.showSettings()
     }
 }

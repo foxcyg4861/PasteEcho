@@ -1,6 +1,6 @@
 import Foundation
 
-struct ClipboardItem: Identifiable, Codable, Equatable {
+struct ClipboardItem: Identifiable, Codable, Equatable, Sendable {
     let id: UUID
     let contentType: ContentType
 

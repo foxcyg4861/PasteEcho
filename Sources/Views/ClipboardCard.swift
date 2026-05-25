@@ -3,7 +3,7 @@ import SwiftUI
 struct ClipboardCard: View {
     let item: ClipboardItem
     @EnvironmentObject private var viewModel: AppViewModel
-    @State private var isHovered = false
+    @State private var showActionPopover = false
 
     var body: some View {
         HStack(spacing: 10) {
@@ -21,30 +21,6 @@ struct ClipboardCard: View {
             }
 
             Spacer(minLength: 0)
-
-            if isHovered || item.isPinned {
-                HStack(spacing: 4) {
-                    Button {
-                        viewModel.togglePin(item)
-                    } label: {
-                        Image(systemName: item.isPinned ? "pin.fill" : "pin")
-                            .font(.system(size: 14))
-                            .foregroundColor(item.isPinned ? .pasteEchoBlue : .secondary)
-                    }
-                    .buttonStyle(.plain)
-                    .help(item.isPinned ? "Unpin" : "Pin")
-
-                    Button {
-                        viewModel.deleteItem(item)
-                    } label: {
-                        Image(systemName: "trash")
-                            .font(.system(size: 14))
-                            .foregroundColor(.pasteEchoDestructive)
-                    }
-                    .buttonStyle(.plain)
-                    .help("Delete")
-                }
-            }
 
             if viewModel.pastedItemId == item.id {
                 Image(systemName: "checkmark.circle.fill")
@@ -64,13 +40,12 @@ struct ClipboardCard: View {
                 .strokeBorder(Color.secondary.opacity(0.15), lineWidth: 0.5)
         )
         .contentShape(Rectangle())
-        .onHover { hovering in
-            isHovered = hovering
-        }
         .onTapGesture {
-            viewModel.pasteItem(item)
+            showActionPopover = true
         }
-        .animation(.easeInOut(duration: 0.2), value: isHovered)
+        .popover(isPresented: $showActionPopover, arrowEdge: .trailing) {
+            ClipboardActionPopover(item: item)
+        }
         .animation(.easeInOut(duration: 0.2), value: viewModel.pastedItemId)
     }
 

@@ -22,5 +22,8 @@ PasteEcho.xcodeproj/
 .vscode/
 .idea/
 
+# Build artifacts
+*.o
+
 # Archive
 *.xcarchive

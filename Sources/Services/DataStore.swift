@@ -7,6 +7,8 @@ final class DataStore: ObservableObject {
 
     @Published var items: [ClipboardItem] = []
     @Published var settings = Settings()
+    var onItemsChanged: (@MainActor () -> Void)?
+    var onWindowModeChanged: (@MainActor () -> Void)?
 
     let baseDir: URL
     private let itemsFileURL: URL
@@ -43,9 +45,14 @@ final class DataStore: ObservableObject {
     // MARK: - Item Management
 
     func add(_ item: ClipboardItem) {
+        if let hash = item.contentHash,
+           let existingIdx = items.firstIndex(where: { $0.contentHash == hash }) {
+            items.remove(at: existingIdx)
+        }
         items.insert(item, at: 0)
         cleanupExpired()
         enforceMaxCount()
+        onItemsChanged?()
     }
 
     func remove(id: UUID) {
@@ -58,6 +65,7 @@ final class DataStore: ObservableObject {
         }
 
         items.remove(at: idx)
+        onItemsChanged?()
     }
 
     // MARK: - Cleanup

@@ -7,8 +7,8 @@ final class HotkeyManager {
 
     private nonisolated(unsafe) var eventHotKeyRef: EventHotKeyRef?
     private nonisolated(unsafe) var eventHandlerRef: EventHandlerRef?
-    private nonisolated(unsafe) let hotKeySignature = FourCharCode(0x50454300)
-    private nonisolated(unsafe) let hotKeyID = UInt32(1)
+    private let hotKeySignature = FourCharCode(0x50454300)
+    private let hotKeyID = UInt32(1)
 
     func register() {
         guard eventHotKeyRef == nil else { return }
@@ -16,7 +16,7 @@ final class HotkeyManager {
         let modifiers: UInt32 = UInt32(cmdKey | shiftKey)
         let keyCode: UInt32 = UInt32(kVK_ANSI_V)
 
-        var hotKeyIDStruct = EventHotKeyID(signature: hotKeySignature, id: hotKeyID)
+        let hotKeyIDStruct = EventHotKeyID(signature: hotKeySignature, id: hotKeyID)
 
         let registerStatus = RegisterEventHotKey(
             keyCode,

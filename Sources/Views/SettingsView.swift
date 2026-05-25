@@ -7,6 +7,15 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section {
+                Picker("Window Mode", selection: $dataStore.settings.windowMode) {
+                    ForEach(WindowMode.allCases) { mode in
+                        Text(mode.displayName).tag(mode)
+                    }
+                }
+                .pickerStyle(.radioGroup)
+            }
+
+            Section {
                 Picker("Retention Period", selection: $dataStore.settings.retentionPeriod) {
                     ForEach(RetentionPeriod.allCases) { period in
                         Text(period.displayName).tag(period)
@@ -22,16 +31,20 @@ struct SettingsView: View {
             }
         }
         .formStyle(.grouped)
-        .frame(width: 320, height: 200)
-        .onChange(of: dataStore.settings.retentionPeriod) { _ in
+        .frame(width: 320, height: 280)
+        .onChangeCompat(of: dataStore.settings.retentionPeriod) { _ in
             dataStore.saveSettings()
         }
-        .onChange(of: dataStore.settings.maxItemCount) { _ in
+        .onChangeCompat(of: dataStore.settings.maxItemCount) { _ in
             dataStore.saveSettings()
         }
-        .onChange(of: dataStore.settings.launchAtLogin) { newValue in
+        .onChangeCompat(of: dataStore.settings.launchAtLogin) { newValue in
             AutoLaunchManager.setEnabled(newValue)
             dataStore.saveSettings()
+        }
+        .onChangeCompat(of: dataStore.settings.windowMode) { _ in
+            dataStore.saveSettings()
+            dataStore.onWindowModeChanged?()
         }
     }
 }
